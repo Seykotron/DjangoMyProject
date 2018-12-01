@@ -15,21 +15,21 @@ class Topic(models.Model):
     # Es la fecha de la ultima actualizacion del hilo, y se pone a la fecha actual con la creacion del mismo
     last_updated    = models.DateTimeField(auto_now_add=True)
     # Se establece una relacion de clave foranea con el Board con el campo topics
-    board           = models.ForeignKey( Board, related_name="topics" )
+    board           = models.ForeignKey( Board, related_name="topics", on_delete=models.CASCADE )
     # Se establece una relacion de clave foranea con el Usuario que creo el Topic con el campo topics
-    starter         = models.ForeignKey( User, related_name="topics" )
+    starter         = models.ForeignKey( User, related_name="topics", on_delete=models.CASCADE )
 
 # Clase Posts -> son los comentarios que se agregan a los hilos
 class Post(models.Model):
     # Este es el mensaje que escribe el usuario, tiene como maximo 4 mil caracteres
     message         = models.TextField( max_length=4000 )
     # Se establece una relacion de clave foranea con los hilos con el campo posts
-    topic           = models.ForeignKey( Topic, related_name="posts" )
+    topic           = models.ForeignKey( Topic, related_name="posts", on_delete=models.CASCADE )
     # Fecha en la que se crea el post
     created_at      = models.DateTimeField( auto_now_add=True )
     # Fecha de la ultima actualizacion del post
     updated_at      = models.DateTimeField( auto_now_add=True )
     # Usuario que creo el post
-    created_by      = models.ForeignKey( User, related_name="posts" )
+    created_by      = models.ForeignKey( User, related_name="posts", on_delete=models.CASCADE )
     # Usuario que actualizo el post, related_name="+" <-- significa que no deseamos una relación inversa para que django no la cree
-    updated_by      = models.ForeignKey( User, null=True, related_name="+" )
+    updated_by      = models.ForeignKey( User, null=True, related_name="+", on_delete=models.CASCADE )
