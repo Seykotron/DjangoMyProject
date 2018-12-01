@@ -8,6 +8,10 @@ class Board(models.Model):
     # A la descripcion le damos algo mas de cancha
     description = models.CharField(max_length=100)
 
+    # Este metodo devuelve la representacion en string del objeto
+    def __str__(self):
+        return self.name
+
 # Clase Topic -> es el hilo sobre el que se escriben los comentarios
 class Topic(models.Model):
     # El titulo tan solo tiene 255 caracteres como maximo
@@ -18,6 +22,10 @@ class Topic(models.Model):
     board           = models.ForeignKey( Board, related_name="topics", on_delete=models.CASCADE )
     # Se establece una relacion de clave foranea con el Usuario que creo el Topic con el campo topics
     starter         = models.ForeignKey( User, related_name="topics", on_delete=models.CASCADE )
+
+    # Este metodo devuelve la representacion en string del objeto
+    def __str__(self):
+        return self.subject
 
 # Clase Posts -> son los comentarios que se agregan a los hilos
 class Post(models.Model):
@@ -33,3 +41,7 @@ class Post(models.Model):
     created_by      = models.ForeignKey( User, related_name="posts", on_delete=models.CASCADE )
     # Usuario que actualizo el post, related_name="+" <-- significa que no deseamos una relación inversa para que django no la cree
     updated_by      = models.ForeignKey( User, null=True, related_name="+", on_delete=models.CASCADE )
+
+    # Este metodo devuelve la representacion en string del objeto
+    def __str__(self):
+        return self.created_by.username
