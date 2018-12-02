@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include, re_path
-from boards.views import Home
+from boards.views import Home,BoardTopics,NewTopic
 
 urlpatterns = [
     re_path(r"^$", Home.as_view(), name="home"),
+    re_path(r"^boards/(?P<pk>\d+)/$", BoardTopics.as_view(), name="board_topics"),
+    re_path(r"^boards/(?P<pk>\d+)/new/$", NewTopic.as_view(), name="new_topic"),
     path('admin/', admin.site.urls),
 ]
