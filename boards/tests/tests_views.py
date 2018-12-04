@@ -1,9 +1,9 @@
 from django.urls import reverse, resolve
 from django.test import TestCase
 from boards.views import Home, BoardTopics, NewTopic
-from .models import Board, Topic, Post
+from ..models import Board, Topic, Post
 from django.contrib.auth.models import User
-from .forms import NewTopicForm
+from ..forms import NewTopicForm
 
 # Create your tests here.
 
@@ -24,7 +24,7 @@ class HomeTests(TestCase):
         view = resolve("/")
         # De esta manera se comprueba que la vista que se esta visionando coincide con la que
         # devuelve el ejecutar el metodo Home.as_view()
-        self.assertEqual(view.func.__name__, Home.as_view().__name__)
+        self.assertEqual(view.func.view_class, Home)
 
     def test_home_view_contains_link_to_topics_page(self):
         # Cargamos las topic url
@@ -57,7 +57,7 @@ class BoardTopicsTests(TestCase):
     # Compruebo que resuelve bien el board
     def test_board_topics_url_resolves_board_topics_views(self):
         view = resolve("/boards/1/")
-        self.assertEqual( view.func.__name__, BoardTopics.as_view().__name__ )
+        self.assertEqual( view.func.view_class, BoardTopics )
 
     # Compruebo que el Board tiene un link de vuelta a la homepage
     def test_board_topics_view_contains_link_back_to_homepage(self):
@@ -94,18 +94,18 @@ class NewTopicTest(TestCase):
     def test_new_topic_view_success_status_code(self):
         url = reverse('new_topic', kwargs={'pk': self.board.pk})
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     # Compruebo que para un objeto inexistente devuelve un 404
     def test_new_topic_view_not_found_status_code(self):
         url = reverse( "new_topic", kwargs={"pk" : self.board.pk+1})
         response = self.client.get( url )
-        self.assertEquals( response.status_code, 404 )
+        self.assertEqual( response.status_code, 404 )
 
     # Compruebo que resuelve bien la vista de nuevo topic
     def test_new_topic_url_resolves_new_topic_view(self):
         view = resolve("/boards/{0}/new/".format(self.board.pk))
-        self.assertEquals( view.func.__name__, NewTopic.as_view().__name__ )
+        self.assertEqual( view.func.view_class, NewTopic )
 
     # Compruebo que existen links de vuelta a la lista de los Topics
     def test_new_topic_view_contains_links_back_to_board_topics_views(self):
@@ -141,7 +141,7 @@ class NewTopicTest(TestCase):
         url = reverse( "new_topic", kwargs={"pk": self.board.pk})
         response = self.client.post( url, {})
         form = response.context.get('form')
-        self.assertEquals( response.status_code, 200 )
+        self.assertEqual( response.status_code, 200 )
         self.assertTrue( form.errors )
 
     # Compruebo qué ocurre si envio datos en vacío
@@ -158,7 +158,7 @@ class NewTopicTest(TestCase):
         }
         response = self.client.post( url, data)
         form = response.context.get('form')
-        self.assertEquals( response.status_code, 200 )
+        self.assertEqual( response.status_code, 200 )
         self.assertFalse( Topic.objects.exists() )
         self.assertFalse( Post.objects.exists() )
         self.assertTrue( form.errors )

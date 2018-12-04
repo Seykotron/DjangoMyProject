@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Registrarse en Django Boards{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="card w-75">
+      <div class="card-body">
+        <h3 class="card-title">Regístrate</h3>
+        <form method="POST" novalidate>
+          {% csrf_token %}
+          {% include "includes/form.html" %}
+          <button type="submit" class="btn btn-primary">Crear cuenta</button>
+        </form>
+      </div>
+      <div class="card-footer text-muted text-center">¿Ya disponías de cuenta? <a href="{% url 'login' %}">Inicia sesión</a></div>
+    </div>
+  </div>
+{% endblock %}
