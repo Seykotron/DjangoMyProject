@@ -11,6 +11,7 @@
           <h3 class="card-title">Iniciar sesión</h3>
           <form method="POST" novalidate>
             {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}" />
             {% include "includes/form.html" %}
             <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
           </form>
@@ -18,7 +19,7 @@
         <div class="card-footer text-muted text-center">¿Eres nuevo en Django Boards? <a href="{% url 'signup' %}">Regístrate!</a></div>
       </div>
       <div class="text-center py-2">
-        <small><a href="#" class="text-muted">¿Olvidaste tu password?</a></small>
+        <small><a href="{% url 'password_reset' %}" class="text-muted">¿Olvidaste tu password?</a></small>
       </div>
     </div>
   </div>

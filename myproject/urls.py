@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include, re_path
-from boards.views import Home,BoardTopics,NewTopic
-from accounts.views import Signup
+from boards.views import Home, NewTopic, ReplyTopic, PostUpdateView, TopicListView, PostListView
+from accounts.views import Signup, UserUpdateView
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -59,10 +59,18 @@ urlpatterns = [
             ),
             name="password_change_done"
     ),
+    re_path(r'^settings/account/$', UserUpdateView.as_view(), name='my_account'),
     re_path(r"^signup/$", Signup.as_view(), name="signup"),
     re_path(r"^login/$", auth_views.LoginView.as_view(template_name='login.html'), name="login"),
     re_path(r"^logout/$", auth_views.LogoutView.as_view(), name="logout"),
-    re_path(r"^boards/(?P<pk>\d+)/$", BoardTopics.as_view(), name="board_topics"),
+    re_path(r"^boards/(?P<pk>\d+)/$", TopicListView.as_view(), name="board_topics"),
     re_path(r"^boards/(?P<pk>\d+)/new/$", NewTopic.as_view(), name="new_topic"),
+    re_path(r"^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$", PostListView.as_view(), name="topic_posts"),
+    re_path(r"^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$", ReplyTopic.as_view(), name="reply_topic"),
+    re_path(
+            r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
+            PostUpdateView.as_view(),
+            name='edit_post'
+    ),
     path('admin/', admin.site.urls),
 ]
